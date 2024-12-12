@@ -1,21 +1,8 @@
 #include <Arduino.h>
 
+#include "configuration.h" // sets all variables
+
 /*
-
-  Spot Welder Timer Example
-
-  Check out the instructable here - http://www.instructables.com/id/DIY-Spot-Welder-From-Microwave/
-
-  >>> Before compiling: Please install the u8glib library from below!
-
-  Universal 8bit Graphics Library, https://github.com/olikraus/u8glib/
-
-  Jack Davies, http://jackdaviesdesign.com <<< >>> http://undergroundengineering.co.uk
-
-
-
-*/
-
 #include "U8glib.h"
 
 U8GLIB_SSD1306_128X64 u8g(U8G_I2C_OPT_NONE | U8G_I2C_OPT_DEV_0); // I2C / TWI
@@ -39,63 +26,88 @@ void draw(void)
   u8g.undoScale();
   u8g.drawStr(20, 60, "Miliseconds");
 }
+*/
 
 void setup(void)
 {
-  // flip screen, if required
-  // u8g.setRot180();
+  /*******************************
+    Wire
+  *******************************/
+  Wire.begin();
 
-  // set SPI backup if required
-  // u8g.setHardwareBackup(u8g_backup_avr_spi);
+  /*******************************
+    OLED
+  *******************************/
+  Wire.setClock(400000L);
 
-  // assign default color value
-  if (u8g.getMode() == U8G_MODE_R3G3B2)
+  oled.begin(&Adafruit128x64, I2C_ADDRESS);
+
+  // oled.setFont(Adafruit5x7);
+  oled.setFont(System5x7);
+
+  oled.clear();
+  oled.println("Spot Welder");
+
+  /*******************************
+    Start serial
+  *******************************/
+  if (DEBUG || INFO)
   {
-    u8g.setColorIndex(255); // white
+    oled.println("Starting serial ...");
+
+    Serial.begin(serialSpeed);
   }
-  else if (u8g.getMode() == U8G_MODE_GRAY2BIT)
+  else
   {
-    u8g.setColorIndex(3); // max intensity
-  }
-  else if (u8g.getMode() == U8G_MODE_BW)
-  {
-    u8g.setColorIndex(1); // pixel on
-  }
-  else if (u8g.getMode() == U8G_MODE_HICOLOR)
-  {
-    u8g.setHiColorByRGB(255, 255, 255);
+    oled.println();
   }
 
-  Serial.begin(9600);
+  /*******************************
+    Print start information
+  *******************************/
+  infoMessln(programName); // print information
+  infoMessln(date);
+  infoMess("by ");
+  infoMessln(author);
+  infoMessln(email);
+  infoMessln();
 
-  pinMode(inPin, INPUT);
-  pinMode(ssrPin, OUTPUT);
+  /*******************************
+   In- and outputs
+ *******************************/
+  oled.println("Starting in-, outputs ...");
+
+  infoMessln("Starting in-, outputs ...");
+  /*
+    pinMode(levelLED_neg1, OUTPUT); // set level LEDs as outputs
+    pinMode(levelLED_neg0, OUTPUT);
+    pinMode(levelLED_level, OUTPUT);
+    pinMode(levelLED_pos0, OUTPUT);
+    pinMode(levelLED_pos1, OUTPUT);
+  */
+
+  oled.clear();
+
+  infoMessln("Started!");
+  infoMessln();
+
+  startMillis = millis();
 }
 
 void loop(void)
 {
-  // picture loop
-  u8g.firstPage();
-  do
+/*
+  infoMess(startMillis);
+  infoMess("  ");
+  infoMess(millis());
+  infoMess("  ");
+  infoMess(millis() - startMillis);
+  infoMessln("  hej");
+*/
+
+  if (millis() - startMillis > 1000)
   {
-    draw();
-  } while (u8g.nextPage());
-
-  // rebuild the picture after some delay
-  // delay(50);
-
-  potVal = analogRead(potPin);            // reads the value of the potentiometer (value between 0 and 1023)
-  potVal = map(potVal, 0, 1023, 10, 500); // scale it to use it get the right time (value between 10 and 500)
-
-  triggerSwitch = digitalRead(inPin);
-
-  Serial.println(triggerSwitch);
-
-  if (triggerSwitch == HIGH)
-  {
-    digitalWrite(ssrPin, HIGH);
-    delay(potVal);
-    digitalWrite(ssrPin, LOW);
-    delay(1000);
+    infoMessln("Alive");
+    startMillis = millis();
   }
 }
