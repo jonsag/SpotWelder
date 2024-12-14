@@ -448,7 +448,7 @@
     "pinned_symbol_libs": []
   },
   "meta": {
-    "filename": "SpotWelder - Arduino Pro Mini vB.kicad_pro",
+    "filename": "SpotWelder - Arduino Pro Mini vA.kicad_pro",
     "version": 1
   },
   "net_settings": {
@@ -485,7 +485,7 @@
       "netlist": "",
       "plot": "",
       "pos_files": "",
-      "specctra_dsn": "SpotWelder - Arduino Pro Mini vB.dsn",
+      "specctra_dsn": "SpotWelder - Arduino Pro Mini vA.dsn",
       "step": "",
       "svg": "",
       "vrml": ""
