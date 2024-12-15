@@ -15,6 +15,9 @@ void onPinActivated(int pinNr)
     case triggerPin:
         weld();
         break;
+    case armPin:
+        arm();
+        break;
     }
 }
 
@@ -25,6 +28,13 @@ void onPinDeactivated(int pinNr)
       Serial.print("Pin deactivated: ");
       Serial.println(pinNr);
     */
+
+    switch (pinNr)
+    {
+    case armPin:
+        disarm();
+        break;
+    }
 }
 
 void readButtons()

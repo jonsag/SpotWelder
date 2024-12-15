@@ -67,6 +67,10 @@ void setup(void)
   *******************************/
   infoMessln("Starting in-, outputs ...");
 
+  pinMode(onLED, OUTPUT);
+  pinMode(armLED, OUTPUT);
+  pinMode(weldingLED, OUTPUT);
+
   pinMode(ssrPin, OUTPUT);
 
   /*******************************
@@ -74,7 +78,8 @@ void setup(void)
   *******************************/
   infoMessln("Starting debouncer ...");
 
-  pinDebouncer.addPin(triggerPin, LOW, onPinActivated, onPinDeactivated); // pin has external pull-down resistor
+  pinDebouncer.addPin(armPin, LOW, onPinActivated, onPinDeactivated); // pin has external pull-down resistor
+  pinDebouncer.addPin(triggerPin, LOW, onPinActivated, onPinDeactivated);
 
   pinDebouncer.begin();
 
@@ -112,6 +117,8 @@ void setup(void)
   {
     draw();
   } while (u8g.nextPage());
+
+  digitalWrite(onLED, HIGH);
 }
 
 void loop(void)
@@ -141,8 +148,22 @@ void loop(void)
   infoMess("\t");
   infoMessln(startMillis - currentMillis);*/
 
-  if ((welding == HIGH) && (currentMillis - startMillis >= pulseLength))
+  if ((welding == HIGH) && (armed == LOW))
   {
+    digitalWrite(weldingLED, LOW);
+    digitalWrite(ssrPin, LOW);
+
+    infoMessln("Welding interrupted");
+    infoMess("Welded for ");
+    infoMess(currentMillis - startMillis);
+    infoMessln(" milli seconds!");
+
+    welding = LOW;
+  }
+
+  if ((welding == HIGH) && (currentMillis - startMillis >= pulseLength) && (armed == LOW))
+  {
+    digitalWrite(weldingLED, LOW);
     digitalWrite(ssrPin, LOW);
 
     infoMessln("Welding finished");
@@ -152,6 +173,7 @@ void loop(void)
 
     welding = LOW;
   }
+
   /*if (currentMillis - startMillis >= pulseLength)
   {
     if (ledState == LOW)

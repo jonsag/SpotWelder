@@ -2943,7 +2943,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "My_Arduino:Arduino_Pro_Mini_vC_no-progr-large"
+		(property "Footprint" "My_Arduino:Arduino_Pro_Mini_vA_sides_n_A4,A5_large"
 			(at 181.61 92.71 0)
 			(effects
 				(font

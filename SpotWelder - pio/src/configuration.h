@@ -81,8 +81,13 @@ byte push;
 *******************************/
 int potPin = 0; // analog pin used to connect the potentiometer
 
-#define triggerPin 10
-int ssrPin = 8;
+#define armPin 8
+#define triggerPin 9
+#define ssrPin 11
+
+#define onLED 5
+#define armLED 6
+#define weldingLED 7 
 
 /*******************************
   Misc
@@ -90,11 +95,12 @@ int ssrPin = 8;
 double startMillis;
 double currentMillis;
 
-boolean ledState;
+//boolean ledState;
 #define blinkInterval 500
 
-int pulseLength = 500; // variable to read the value from the analog pin
+int pulseLength = 500;
 int pulseStep = 10;
 int newPulseLength;
 
+boolean armed = LOW;
 boolean welding = LOW;
