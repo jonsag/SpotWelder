@@ -3,41 +3,44 @@
 /*******************************
   Buttons
 *******************************/
-
-void onPinActivated(int pinNr)
+void readInputs()
 {
-    infoMessln();
-    infoMess("Pin activated: ");
-    infoMessln(pinNr);
-
-    switch (pinNr)
+    armState = digitalRead(armPin);
+    if ((armState == HIGH) && (armed == LOW))
     {
-    case triggerPin:
-        weld();
-        break;
-    case armPin:
         arm();
-        break;
     }
-}
-
-void onPinDeactivated(int pinNr)
-{
-    infoMessln("Button is released");
-    /*Serial.println();
-      Serial.print("Pin deactivated: ");
-      Serial.println(pinNr);
-    */
-
-    switch (pinNr)
+    else if ((armState == LOW) && (armed == HIGH))
     {
-    case armPin:
         disarm();
-        break;
+    }
+
+    triggerState = digitalRead(triggerPin);
+    if (triggerState != oldTriggerState)
+    {
+        if (triggerState == HIGH)
+        {
+            infoMessln();
+            infoMessln("Trigger is pushed");
+            if (armed == HIGH)
+            {
+                weld();
+            }
+        }
+        else
+        {
+            infoMessln();
+            infoMessln("Trigger is released");
+        }
+
+        oldTriggerState = triggerState;
     }
 }
 
-void readButtons()
+/*******************************
+  Rotary Encoder
+*******************************/
+void readRotary()
 {
     rotate = rotary.rotate();
     push = rotary.push();
@@ -54,8 +57,6 @@ void readButtons()
         if (push) // left button pressed
         {
             infoMessln("Button pressed");
-
-            button4Action();
         }
         else
         {

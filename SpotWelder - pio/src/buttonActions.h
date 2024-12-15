@@ -3,7 +3,6 @@
 *******************************/
 void weld()
 {
-  infoMessln("Weld button is pressed");
   infoMess("Welding for ");
   infoMess(pulseLength);
   infoMessln(" milli seconds!");
@@ -17,16 +16,16 @@ void weld()
 
 void arm()
 {
+  infoMessln();
+  infoMessln("Armed!");
   armed = HIGH;
   digitalWrite(armLED, HIGH);
 }
 
 void disarm()
 {
+  infoMessln();
+  infoMessln("Disarmed");
   armed = LOW;
   digitalWrite(armLED, LOW);
-}
-void button4Action()
-{
-  infoMessln("Button 4 is pressed");
 }

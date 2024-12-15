@@ -54,7 +54,7 @@ U8GLIB_SSD1306_128X64 u8g(U8G_I2C_OPT_NONE | U8G_I2C_OPT_DEV_0);
 /*******************************
  FTDebouncer setup
 *******************************/
-const byte debounceTime = 15;
+/*const byte debounceTime = 15;
 
 #if !defined(nullptr)
 #define nullptr NULL
@@ -62,6 +62,7 @@ const byte debounceTime = 15;
 
 #include "FTDebouncer.h" // load library for debouncing buttons
 FTDebouncer pinDebouncer(debounceTime);
+*/
 
 /*******************************
   Rotary encoders
@@ -79,10 +80,9 @@ byte push;
 /*******************************
   In- and outputs
 *******************************/
-int potPin = 0; // analog pin used to connect the potentiometer
-
 #define armPin 8
 #define triggerPin 9
+
 #define ssrPin 11
 
 #define onLED 5
@@ -101,6 +101,12 @@ double currentMillis;
 int pulseLength = 500;
 int pulseStep = 10;
 int newPulseLength;
+
+boolean triggerState = LOW;
+boolean oldTriggerState = LOW;
+
+boolean armState = LOW;
+//boolean oldArmState = LOW;
 
 boolean armed = LOW;
 boolean welding = LOW;

@@ -67,21 +67,15 @@ void setup(void)
   *******************************/
   infoMessln("Starting in-, outputs ...");
 
+  pinMode(armPin, INPUT);
+  pinMode(triggerPin, INPUT);
+  pinMode(ssrPin, INPUT);
+
   pinMode(onLED, OUTPUT);
   pinMode(armLED, OUTPUT);
   pinMode(weldingLED, OUTPUT);
 
   pinMode(ssrPin, OUTPUT);
-
-  /*******************************
-    Setup FTDebouncer pins
-  *******************************/
-  infoMessln("Starting debouncer ...");
-
-  pinDebouncer.addPin(armPin, LOW, onPinActivated, onPinDeactivated); // pin has external pull-down resistor
-  pinDebouncer.addPin(triggerPin, LOW, onPinActivated, onPinDeactivated);
-
-  pinDebouncer.begin();
 
   /*******************************
      Set up rotary encoders
@@ -124,8 +118,8 @@ void setup(void)
 void loop(void)
 {
   // ******************** handle buttons *******************
-  readButtons();
-  pinDebouncer.update();
+  readInputs();
+  readRotary();
 
   // picture loop
   if (pulseLength != newPulseLength)
@@ -153,6 +147,7 @@ void loop(void)
     digitalWrite(weldingLED, LOW);
     digitalWrite(ssrPin, LOW);
 
+    infoMessln();
     infoMessln("Welding interrupted");
     infoMess("Welded for ");
     infoMess(currentMillis - startMillis);
@@ -166,6 +161,7 @@ void loop(void)
     digitalWrite(weldingLED, LOW);
     digitalWrite(ssrPin, LOW);
 
+    infoMessln();
     infoMessln("Welding finished");
     infoMess("Welded for ");
     infoMess(currentMillis - startMillis);
