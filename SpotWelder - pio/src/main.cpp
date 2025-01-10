@@ -156,7 +156,7 @@ void loop(void)
     welding = LOW;
   }
 
-  if ((welding == HIGH) && (currentMillis - startMillis >= pulseLength) && (armed == LOW))
+  if ((welding == HIGH) && (currentMillis - startMillis >= pulseLength))
   {
     digitalWrite(weldingLED, LOW);
     digitalWrite(ssrPin, LOW);
